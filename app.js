@@ -7,6 +7,7 @@ var session = require('express-session')
 var indexRouter = require('./routes/login');
 var usersRouter = require('./routes/users');
 var homepageRouter = require('./routes/HomePage');
+var adminhomeRouter = require('./routes/adminhome');
 
 var app = express();
 
@@ -17,7 +18,7 @@ app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 
 app.use(session({
-  cookie: { maxAge: null, secure: false },
+  cookie: { maxAge: 60000, secure: false },
   secret: 'keyboard cat',
   saveUninitialized: true,
   resave: true
@@ -26,6 +27,7 @@ app.use(session({
 app.use('/', indexRouter);
 app.use('/users', usersRouter);
 app.use('/homepage', homepageRouter);
+app.use('/adminhome', adminhomeRouter);
 
 app.use(express.static(path.join(__dirname, 'public')));
 
