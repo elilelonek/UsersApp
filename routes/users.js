@@ -7,17 +7,18 @@ countforAuth = 0;
 countforadmin = 1;
 
 users = [
+    { name: "admin", age: null, id: count++, phone: null },
     { name: "eli", age: 33, id: count++, phone: "0526670100" },
     { name: "saar", age: 38, id: count++, phone: "0525005001" },
     { name: "tomer", age: 22, id: count++, phone: "0526006001" }
 ];
 
 AdminUsers = [
-    { name: "eli", id: 0 }
+    { name: "admin", id: 0 }
 ];
 
 usersAuth = [
-    { name: "eli", password: "1234" }
+    { name: "admin", password: "1234" }
 ];
 
 /* GET users listing. */
