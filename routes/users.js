@@ -106,10 +106,11 @@ router.delete('/deleteadmin', function (req, res) {
 
     var username = req.session.user_logged_in
     CheckifAdmin = checkisAdmin(username);
+    BuildInAdminUser = req.body.user_name
 
     if (username && CheckifAdmin) {
 
-        if(username == "admin"){
+        if(BuildInAdminUser == "admin"){
 
             response.success = false;
             response.message = `<div class="alert alert-warning alert-dismissible fade show" role="alert">
