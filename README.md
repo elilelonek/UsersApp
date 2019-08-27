@@ -14,6 +14,7 @@ Instructions:
 5) in Every move we have alerts on the screen
 6) NO DataBase is require (Meanwhile..)
 7) Beacause (No' 6) for now, each time the Server is restarted, Any change will be lost.
+8) Session TimeOut is Configured for 6 Minutes
 
 
 Enjoy!
