@@ -18,7 +18,7 @@ app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 
 app.use(session({
-  cookie: { maxAge: 60000, secure: false },
+  cookie: { maxAge: 3600000, secure: false },
   secret: 'keyboard cat',
   saveUninitialized: true,
   resave: true

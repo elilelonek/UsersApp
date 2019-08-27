@@ -41,7 +41,6 @@ function login(){
         </button>
         </div>`
         showHideMessage(msg, true)
-        $("#failureLogin").show(500);
     }
     else{
     $.ajax({
@@ -62,7 +61,6 @@ function login(){
                     })
             }
             else{
-                $("#failureLogin").show(500);
                 showHideMessage(result.message, true);
             }
         },
@@ -81,22 +79,34 @@ function RegisterUser(){
     var age = $("#ageregister").val();
     var phone = $("#phoneforregister").val();
 
-    $.ajax({
-        url:'http://localhost:3000/users/registeruser',
-        type:"PUT",
-        data:{"password": password, "name": user, "age": age, "phone": phone},
-        success:function( result ){
-
-            showHideMessage_RegUser(result.message, true);
-            $(".add-user-form,.cover").fadeOut(2000)
-        },
-        error:function( xhr ){
-            showHideMessage_RegUser(result.message, true);
-            $("#failureLogin").show(500);
-            console.log("Ajax Func");
-            console.log("Error:",xhr);
-        }
-    });    
+    if(user.length == 0 || password.length == 0 || age.length == 0 || phone.length == 0){
+        msg = `<div class="alert alert-warning alert-dismissible fade show" role="alert">
+        <strong>One of the fields is empty!</strong>
+        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+        </div>`
+        showHideMessage_RegUser(msg, true)
+    }
+    else{
+        $.ajax({
+            url:'http://localhost:3000/users/registeruser',
+            type:"PUT",
+            data:{"password": password, "name": user, "age": age, "phone": phone},
+            success:function( result ){
+                $(function () {
+                    $('#regmodal').modal('toggle');
+                 });
+                showHideMessage(result.message, true);
+                $(".add-user-form,.cover").fadeOut(2000)
+            },
+            error:function( xhr ){
+                showHideMessage_RegUser(result.message, true);
+                console.log("Ajax Func");
+                console.log("Error:",xhr);
+            }
+        });
+    }
 }
 
 function showHideMessage(msg, show) {

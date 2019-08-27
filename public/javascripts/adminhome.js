@@ -10,8 +10,6 @@ function getUsersList() {
       success: function (result) {
           if (result.success) {
               printUsersTable(result.data, result.AdminUsers);
-              console.log(result.data);
-              console.log(result.AdminUsers);
           } else {
 
           }
@@ -51,7 +49,7 @@ function printUsersTable(users, AdminUsers) {
     htmladmin += `<tr>
         <td>${user.id}</td>
         <td>${user.name}</td>
-        <td><i class='fa fa-trash' onclick='deleteAdmin(${user.id})'></i></td>
+        <td><i class='fa fa-trash' onclick='deleteAdmin(${JSON.stringify(user)})'></i></td>
             </tr>`;
 });
 
@@ -59,61 +57,79 @@ function printUsersTable(users, AdminUsers) {
   $("#admin_table tbody").html(htmladmin);
 }
 
-function addUserfunc(){
-var isAdmin = document.getElementById('admin').checked
+function addUser(){
 
-if(isAdmin){
+    let user = $("#name").val().toLowerCase();
+    let age = $("#age").val();
+    let phone = $("#phone").val();
+    let password = $("#password").val();
 
-        let name = $("#name").val().toLowerCase();
-        let age = $("#age").val();
-        let phone = $("#phone").val();
-        let password = $("#password").val();
-      
-        $.ajax({
-            url: `http://localhost:3000/users/addadminuser`,
-            type: "PUT",
-            data: {name:`${name}`, age:`${age}`, phone:`${phone}`, password:`${password}`},
-            success: function (data) {
-                if (data.success) {
-                    showHideMessage(data.message, true);
-                    getUsersList();
-                } else {
-                  showHideMessage(data.message, true);
-                }
-                console.log(data);
-            },
-            error: function (xhr) {
-                showHideMessage("Error: " + xhr.getMessage(), true);
-                console.error(xhr);
-            }
-        });
-      }
-else{
+    if(user.length == 0 || password.length == 0 || age.length == 0 || phone.length == 0){
+        msg = `<div class="alert alert-warning alert-dismissible fade show" role="alert">
+        <strong>One of the fields is empty!</strong>
+        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+        </div>`
+        showHideMessage(msg, true)
+        $("#failureLogin").show(500);
+    }
+    else{
+        var isAdmin = document.getElementById('admin').checked
 
-        let name = $("#name").val().toLowerCase();
-        let age = $("#age").val();
-        let phone = $("#phone").val();
-        let password = $("#password").val();
-      
-        $.ajax({
-            url: `http://localhost:3000/users/adduser`,
-            type: "PUT",
-            data: {name:`${name}`, age:`${age}`, phone:`${phone}`, password:`${password}`},
-            success: function (data) {
-                if (data.success) {
-                    showHideMessage(data.message, true);
-                    getUsersList();
-                } else {
-                  showHideMessage(data.message, true);
-                }
-                console.log(data);
-            },
-            error: function (xhr) {
-                showHideMessage("Error: " + xhr.getMessage(), true);
-                console.error(xhr);
-            }
-        });
-      }
+        if(isAdmin){
+        
+                let name = $("#name").val().toLowerCase();
+                let age = $("#age").val();
+                let phone = $("#phone").val();
+                let password = $("#password").val();
+              
+                $.ajax({
+                    url: `http://localhost:3000/users/addadminuser`,
+                    type: "PUT",
+                    data: {name:`${name}`, age:`${age}`, phone:`${phone}`, password:`${password}`},
+                    success: function (data) {
+                        if (data.success) {
+                            showHideMessage(data.message, true);
+                            getUsersList();
+                        } else {
+                          showHideMessage(data.message, true);
+                        }
+                        console.log(data);
+                    },
+                    error: function (xhr) {
+                        showHideMessage("Error: " + xhr.getMessage(), true);
+                        console.error(xhr);
+                    }
+                });
+              }
+        else{
+        
+                let name = $("#name").val().toLowerCase();
+                let age = $("#age").val();
+                let phone = $("#phone").val();
+                let password = $("#password").val();
+              
+                $.ajax({
+                    url: `http://localhost:3000/users/adduser`,
+                    type: "PUT",
+                    data: {name:`${name}`, age:`${age}`, phone:`${phone}`, password:`${password}`},
+                    success: function (data) {
+                        if (data.success) {
+                            showHideMessage(data.message, true);
+                            getUsersList();
+                        } else {
+                          showHideMessage(data.message, true);
+                        }
+                        console.log(data);
+                    },
+                    error: function (xhr) {
+                        showHideMessage("Error: " + xhr.getMessage(), true);
+                        console.error(xhr);
+                    }
+                });
+              }
+    }
 }
 
 function deleteUser(user_id) {
@@ -137,11 +153,11 @@ function deleteUser(user_id) {
   });
 }
 
-function deleteAdmin(user_id) {
+function deleteAdmin(user) {
     $.ajax({
         url: `http://localhost:3000/users/deleteadmin`,
         type: "DELETE",
-        data: {user_id:`${user_id}`},
+        data: {user_id:`${user.id}`, user_name:`${user.name}`},
         success: function (data) {
             showHideMessage(data.message, true);
             if (data.success) {

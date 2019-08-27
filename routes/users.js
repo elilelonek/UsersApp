@@ -8,6 +8,7 @@ countforadmin = 1;
 
 users = [
     { name: "admin", age: null, id: count++, phone: null },
+    { name: "test", age: null, id: count++, phone: null },
     { name: "eli", age: 33, id: count++, phone: "0526670100" },
     { name: "saar", age: 38, id: count++, phone: "0525005001" },
     { name: "tomer", age: 22, id: count++, phone: "0526006001" }
@@ -18,29 +19,34 @@ AdminUsers = [
 ];
 
 usersAuth = [
-    { name: "admin", password: "1234" }
+    { name: "admin", password: "1234" },
+    { name: "test", password: "1234" }
 ];
 
-/* GET users listing. */
-router.get('/', function (req, res, next) {
+// GET users listing.
+router.get('/', function (req, res) {
 
     var response = new httpresponse();
-    CheckLoggedInAdmin = checkisAdmin(req.session.user_logged_in);
 
-    if (req.session.user_logged_in && CheckLoggedInAdmin) {
+    username = req.session.user_logged_in
+    CheckifAdmin = checkisAdmin(username);
+
+    if (username && CheckifAdmin) {
         
-        response.redirect = "http://localhost:3000/adminhome"
+        response.redirect = "http://localhost:3000/adminhome";
         response.success = true;
         response.data = users;
         response.AdminUsers = AdminUsers;
-    } else if(req.session.user_logged_in && !CheckLoggedInAdmin){
 
-        response.redirect = "http://localhost:3000/homepage"
+    } else if(username && !CheckifAdmin){
+
+        response.redirect = "http://localhost:3000/homepage";
         response.success = true;
         response.data = users;
-        response.AdminUsers = AdminUsers;
+
     }
     else{
+
         response.success = false;
         response.message = `<div class="alert alert-warning alert-dismissible fade show" role="alert">
         <strong>You Are Not Allowed To Run This Function!</strong>
@@ -53,14 +59,16 @@ router.get('/', function (req, res, next) {
     res.json(response);
 });
 
-router.delete('/deleteuser', function (req, res, next) {
+// Delete Regular users
+router.delete('/deleteuser', function (req, res) {
 
     var response = new httpresponse();
-    var user_name = req.session.user_logged_in
-    CheckisAdmin = checkisAdmin(user_name);
-    console.log(req.session.user_logged_in)
 
-    if (req.session.user_logged_in && CheckisAdmin) {
+    var username = req.session.user_logged_in
+    CheckifAdmin = checkisAdmin(user_name);
+
+    if (username && CheckifAdmin) {
+
         response.success = true;
         response.message = `<div class="alert alert-warning alert-dismissible fade show" role="alert">
         <strong>User has been Deleted!</strong>
@@ -68,13 +76,16 @@ router.delete('/deleteuser', function (req, res, next) {
           <span aria-hidden="true">&times;</span>
         </button>
         </div>`;
+
         users.map((user, index) => {
             if (user.id == req.body.user_id) {
                 users.splice(index, 1);
                 count -= 1
             }
         });
+
     } else {
+
         response.success = false;
         response.message = `<div class="alert alert-warning alert-dismissible fade show" role="alert">
         <strong>You Are Not Allowed To Run This Function!</strong>
@@ -82,33 +93,53 @@ router.delete('/deleteuser', function (req, res, next) {
           <span aria-hidden="true">&times;</span>
         </button>
         </div>`;
+
     }
 
     res.json(response);
 });
 
-router.delete('/deleteadmin', function (req, res, next) {
+// Delete Admins
+router.delete('/deleteadmin', function (req, res) {
 
     var response = new httpresponse();
-    var user_name = req.session.user_logged_in
-    CheckisAdmin = checkisAdmin(user_name);
-    console.log(req.session.user_logged_in)
 
-    if (req.session.user_logged_in && CheckisAdmin) {
-        response.success = true;
-        response.message = `<div class="alert alert-warning alert-dismissible fade show" role="alert">
-        <strong>Admin User has been Deleted!</strong>
-        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-          <span aria-hidden="true">&times;</span>
-        </button>
-        </div>`;
-        AdminUsers.map((user, index) => {
-            if (user.id == req.body.user_id) {
-                AdminUsers.splice(index, 1);
-                count -= 1
-            }
-        });
+    var username = req.session.user_logged_in
+    CheckifAdmin = checkisAdmin(username);
+
+    if (username && CheckifAdmin) {
+
+        if(username == "admin"){
+
+            response.success = false;
+            response.message = `<div class="alert alert-warning alert-dismissible fade show" role="alert">
+            <strong>"admin" User is a Build-In Administrator Account for managing the Application, and Cannot be Deleted.</strong>
+            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+            </div>`;
+
+        }
+        else{
+
+            response.success = true;
+            response.message = `<div class="alert alert-warning alert-dismissible fade show" role="alert">
+            <strong>Admin User '${req.body.user_name}' has been Deleted!</strong>
+            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+            </div>`;
+
+            AdminUsers.map((user, index) => {
+                if (user.id == req.body.user_id) {
+                    AdminUsers.splice(index, 1);
+                    count -= 1
+                }
+            });
+
+        }
     } else {
+
         response.success = false;
         response.message = `<div class="alert alert-warning alert-dismissible fade show" role="alert">
         <strong>You Are Not Allowed To Run This Function!</strong>
@@ -116,12 +147,14 @@ router.delete('/deleteadmin', function (req, res, next) {
           <span aria-hidden="true">&times;</span>
         </button>
         </div>`;
+
     }
 
     res.json(response);
 });
 
-router.delete('/deletesession', function (req, res, next) {
+// Remove User Session when press LogOut Button
+router.delete('/deletesession', function (req, res) {
 
     var response = new httpresponse();
 
@@ -138,26 +171,27 @@ router.delete('/deletesession', function (req, res, next) {
     res.json(response);
 });
 
-router.put('/addadminuser', function (req, res, next) {
+// Add New "Admin" User From Admin Page
+router.put('/addadminuser', function (req, res) {
 
     var response = new httpresponse();
 
-    var user_name = req.body.name;
-    var user_pass = req.body.password;
+    var username = req.body.name;
+    var userpass = req.body.password;
 
-    CheckisAdmin = checkisAdmin(user_name);
-    CheckLoggedInAdmin = checkisAdmin(req.session.user_logged_in);
+    CheckifAdmin = checkisAdmin(username);
+    CheckifLoggedinAdmin = checkisAdmin(req.session.user_logged_in);
 
-        if(CheckisAdmin == true){
+        if(CheckifAdmin == true){
             response.success = false;
             response.message = `<div class="alert alert-warning alert-dismissible fade show" role="alert">
-            <strong>Admin User already registered!</strong>
+            <strong>Admin User '${username}' already registered!</strong>
             <button type="button" class="close" data-dismiss="alert" aria-label="Close">
               <span aria-hidden="true">&times;</span>
             </button>
             </div>`
         }
-        else if(CheckLoggedInAdmin){
+        else if(CheckifLoggedinAdmin){
 
             response.success = true;
             response.message = `<div class="alert alert-warning alert-dismissible fade show" role="alert">
@@ -166,29 +200,31 @@ router.put('/addadminuser', function (req, res, next) {
               <span aria-hidden="true">&times;</span>
             </button>
             </div>`
+
             var user_admin = {
-                name: user_name,
-                password: user_pass,
+                name: username,
                 id: countforadmin++
             }
             
             let new_user = {
-                name: req.body.name,
+                name: username,
                 age: req.body.age,
                 id: count++,
                 phone: req.body.phone
             }
             let user_Auth = {
-                name: user_name,
-                password: user_pass
+                name: username,
+                password: userpass
             };
         
             users.push(new_user);
+
             usersAuth.push(user_Auth)
     
             AdminUsers.push(user_admin);
         }
         else{
+
             response.success = false;
             response.message = `<div class="alert alert-warning alert-dismissible fade show" role="alert">
             <strong>You Are Not Allowed To Run This Function!</strong>
@@ -196,28 +232,32 @@ router.put('/addadminuser', function (req, res, next) {
               <span aria-hidden="true">&times;</span>
             </button>
             </div>`;
+
         }
 
     res.json(response);
 });
 
-router.put('/registeruser', function (req, res, next) {
+// Register User from Registration window ( on Login Screen )
+router.put('/registeruser', function (req, res) {
+
     var response = new httpresponse();
 
-    var user_name = req.body.name;
-    var user_pass = req.body.password;
+    var username = req.body.name;
+    var userpass = req.body.password;
 
-    CheckUserRegStatus = checkUser(user_name)
+    CheckUserRegStatus = checkUser(username)
 
         if (CheckUserRegStatus) {
 
             response.success = false;
             response.message = `<div class="alert alert-warning alert-dismissible fade show" role="alert">
-            <strong>User already registered!</strong>
+            <strong>User '${username}' already registered!</strong>
             <button type="button" class="close" data-dismiss="alert" aria-label="Close">
               <span aria-hidden="true">&times;</span>
             </button>
             </div>`
+
         }
         else{
             let new_user = {
@@ -228,8 +268,8 @@ router.put('/registeruser', function (req, res, next) {
             }
 
             let user_Auth = {
-                name: user_name,
-                password: user_pass
+                name: username,
+                password: userpass
             };
         
             users.push(new_user);
@@ -238,37 +278,40 @@ router.put('/registeruser', function (req, res, next) {
             response.redirect = "http://localhost:3000/homepage";
             response.success = true;
             response.message = `<div class="alert alert-warning alert-dismissible fade show" role="alert">
-            <strong>User has Added!</strong>
+            <strong>User has Registration Complete!</strong>
             <button type="button" class="close" data-dismiss="alert" aria-label="Close">
               <span aria-hidden="true">&times;</span>
             </button>
             </div>`
+
         } 
 
     res.json(response);
 });
 
-router.put('/addUser', function (req, res, next) {
+// Add New "Regular" User From Admin Page
+router.put('/addUser', function (req, res) {
 
     var response = new httpresponse();
 
-    var user_name = req.body.name;
-    var user_pass = req.body.password;
+    var username = req.body.name;
+    var userpass = req.body.password;
 
-    CheckLoggedInAdmin = checkisAdmin(req.session.user_logged_in);
-    CheckUserRegStatus = checkUser(user_name)
+    CheckifLoggedinAdmin = checkisAdmin(req.session.user_logged_in);
+    CheckUserRegStatus = checkUser(username)
 
         if (CheckUserRegStatus) {
 
             response.success = false;
             response.message = `<div class="alert alert-warning alert-dismissible fade show" role="alert">
-            <strong>User already registered!</strong>
+            <strong>User '${username}' already registered!</strong>
             <button type="button" class="close" data-dismiss="alert" aria-label="Close">
               <span aria-hidden="true">&times;</span>
             </button>
             </div>`
+
         }
-        else if(!CheckLoggedInAdmin){
+        else if(!CheckifLoggedinAdmin){
 
             response.success = false;
             response.message = `<div class="alert alert-warning alert-dismissible fade show" role="alert">
@@ -277,18 +320,19 @@ router.put('/addUser', function (req, res, next) {
               <span aria-hidden="true">&times;</span>
             </button>
             </div>`
+
         }
         else{
             let new_user = {
-                name: req.body.name,
+                name: username,
                 age: req.body.age,
                 id: count++,
                 phone: req.body.phone
             }
 
             let user_Auth = {
-                name: user_name,
-                password: user_pass
+                name: username,
+                password: userpass
             };
         
             users.push(new_user);
@@ -302,21 +346,23 @@ router.put('/addUser', function (req, res, next) {
               <span aria-hidden="true">&times;</span>
             </button>
             </div>`
+
         } 
 
     res.json(response);
 });
 
-router.post('/login', function (req, res, next) {
+// Login Request
+router.post('/login', function (req, res) {
 
     var response = new httpresponse();
     
-        user_name = req.body.name;
-        user_pass = req.body.password;
+    username = req.body.name;
+    userpass = req.body.password;
 
-    CheckUserStatus = checkUser(user_name);
-    CheckUserCred = checkUserAuth(user_name, user_pass);
-    CheckisAdmin = checkisAdmin(user_name);
+    CheckUserStatus = checkUser(username);
+    CheckUserCred = checkUserAuth(username, userpass);
+    CheckifAdmin = checkisAdmin(username);
 
     if (CheckUserStatus === undefined) {
 
@@ -327,13 +373,13 @@ router.post('/login', function (req, res, next) {
           <span aria-hidden="true">&times;</span>
         </button>
         </div>`
+        
     }
     else if(CheckUserCred){
 
-        req.session.user_logged_in = user_name
+        req.session.user_logged_in = username
 
         response.success = true;
-
         response.message = `<div class="alert alert-warning alert-dismissible fade show" role="alert">
         <strong>"User Logged In!"</strong>
         <button type="button" class="close" data-dismiss="alert" aria-label="Close">
@@ -341,7 +387,7 @@ router.post('/login', function (req, res, next) {
         </button>
         </div>`
 
-        if(CheckisAdmin == true){
+        if(CheckifAdmin == true){
             response.redirect = "http://localhost:3000/adminhome"
         }
         else{
@@ -352,39 +398,45 @@ router.post('/login', function (req, res, next) {
     else{
 
         response.success = false;
-
         response.message = `<div class="alert alert-warning alert-dismissible fade show" role="alert">
         <strong>"The User Credentials does NOT match!"</strong>
         <button type="button" class="close" data-dismiss="alert" aria-label="Close">
           <span aria-hidden="true">&times;</span>
         </button>
         </div>`
+
     }
 
     res.json(response);
 });
 
-function checkUserAuth(user_name, user_pass) {
+//  Functions that work with variables and arrays //
+// ( In the meantime, until the app works with DataBase like MySql/MongoDB etc.. ) //
+
+// Checks user Credentials and compare with "usersAuth" Array.
+function checkUserAuth(username, userpass) {
     for (let i = 0; i < usersAuth.length; i++){
-        if ( usersAuth[i].name == user_name){
-            if ( usersAuth[i].password == user_pass){
+        if ( usersAuth[i].name == username){
+            if ( usersAuth[i].password == userpass){
                 return true;
             }
         }
     }
 }
 
-function checkUser(user_name) {
-    for (let i = 0; i < usersAuth.length; i++){
-        if ( usersAuth[i].name == user_name){
+// Checks whether the requested user is exists in "users" Group.
+function checkUser(username) {
+    for (let i = 0; i < users.length; i++){
+        if ( users[i].name == username){
                 return true;
         }
     }
 }
 
-function checkisAdmin(user_name) {
+// Checks whether the requested Admin user is exists in "AdminUsers" Group.
+function checkisAdmin(username) {
     for (let i = 0; i < AdminUsers.length; i++){
-        if ( AdminUsers[i].name == user_name){
+        if ( AdminUsers[i].name == username){
                 return true;
         }
     }

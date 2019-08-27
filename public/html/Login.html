@@ -38,17 +38,16 @@
                              <input type="password" class="form-control" placeholder="Password" id="password">
                           </div>
                           <div class="btn btn-black" onclick="login()">Login</div>
-                          <div class="btn btn-secondary" data-toggle="modal" data-target="#exampleModal">Register</div>
+                          <div class="btn btn-secondary" data-toggle="modal" data-target="#regmodal">Register</div>
                           <br>
                           <br>
                           <br>
                           <br>
                           <center>
                                   <div id="user_message" style="display: none"></div>
-                                  <div id="Reg_user_message" style="display: none"></div>
                           </center>
       <!-- Modal -->
-      <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+      <div class="modal fade" id="regmodal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
         <div class="modal-dialog" role="document">
           <div class="modal-content">
             <div class="modal-header">
@@ -68,9 +67,10 @@
             </div>
             <div class="modal-footer">
               <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-              <button type="button" class="btn btn-primary" data-dismiss="modal" onclick="RegisterUser()">Register Now!</button>
+              <button type="button" class="btn btn-primary" onclick="RegisterUser()">Register Now!</button>
             </div>
-          </div>
+            <center><div id="Reg_user_message" style="display: none"></div></center>
+            </div>
         </div>
       </div>
                        </form>

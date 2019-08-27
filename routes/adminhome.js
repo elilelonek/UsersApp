@@ -4,7 +4,7 @@ var path = require('path');
 
 router.get('/', function(req, res) {
 
-    if(req.session.user_logged_in && CheckisAdmin){
+    if(req.session.user_logged_in && CheckifAdmin){
       res.sendFile(path.join(__dirname + '../../public/html/AdminHome.html'));
     }
     else{

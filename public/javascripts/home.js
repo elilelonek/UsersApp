@@ -10,11 +10,10 @@ $(document).ready(function () {
         success: function (result) {
             if (result.success) {
                 printUsersTable(result.data);
-                console.log(result.data);
             } else {
   
             }
-            console.log(result.data);
+
         },
         error: function (xhr) {
             showHideMessage("Error: " + xhr.getMessage(), true);
@@ -55,6 +54,7 @@ $(document).ready(function () {
   }
   
   function printUsersTable(users) {
+      console.log(users)
     let html = "";
   
     users.map((user) => {
@@ -63,7 +63,6 @@ $(document).ready(function () {
             <td>${user.name}</td>
             <td>${user.age}</td>
             <td>${user.phone}</td>
-            <td><i class='fa fa-trash' onclick='deleteUser(${user.id})'></i></td>
                 </tr>`;
     });
   
