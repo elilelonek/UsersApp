@@ -4,7 +4,7 @@ $(document).ready(function () {
 
 function getUsersList() {
   $.ajax({
-      url: "http://localhost:3000/users",
+      url: "http://localhost:3000/api/users",
       type: "GET",
       data: {},
       success: function (result) {
@@ -85,7 +85,7 @@ function addUser(){
                 let password = $("#password").val();
               
                 $.ajax({
-                    url: `http://localhost:3000/users/addadminuser`,
+                    url: `http://localhost:3000/api/users/addadminuser`,
                     type: "PUT",
                     data: {name:`${name}`, age:`${age}`, phone:`${phone}`, password:`${password}`},
                     success: function (data) {
@@ -111,7 +111,7 @@ function addUser(){
                 let password = $("#password").val();
               
                 $.ajax({
-                    url: `http://localhost:3000/users/adduser`,
+                    url: `http://localhost:3000/api/users/adduser`,
                     type: "PUT",
                     data: {name:`${name}`, age:`${age}`, phone:`${phone}`, password:`${password}`},
                     success: function (data) {
@@ -134,7 +134,7 @@ function addUser(){
 
 function deleteUser(user_id) {
   $.ajax({
-      url: `http://localhost:3000/users/deleteuser`,
+      url: `http://localhost:3000/api/users/deleteuser`,
       type: "DELETE",
       data: {user_id:`${user_id}`},
       success: function (data) {
@@ -155,7 +155,7 @@ function deleteUser(user_id) {
 
 function deleteAdmin(user) {
     $.ajax({
-        url: `http://localhost:3000/users/deleteadmin`,
+        url: `http://localhost:3000/api/users/deleteadmin`,
         type: "DELETE",
         data: {user_id:`${user.id}`, user_name:`${user.name}`},
         success: function (data) {
@@ -177,12 +177,12 @@ function deleteAdmin(user) {
 function logout(){
 
     $.ajax({
-        url: `http://localhost:3000/users/deletesession`,
-        type: "DELETE",
+        url: `http://localhost:3000/api/users/deletesession`,
+        type: "POST",
         data: {},
         success:function( result ){
             if(result.success){
-                $('#abovespinner').append(`<h3 class="alert alert-warning alert-dismissible fade show" "style="margin-top:50px;left: calc( 50% - 50px);z-index: 1000;position: fixed;">User has been Logged Out!</h3>`)
+                $('#abovespinner').append(`<h3 class="alert alert-warning alert-dismissible fade show" "style="margin-top:50px;left: calc( 50% - 50px);z-index: 1000;position: fixed;">Please wait.... Logging out</h3>`)
                 $('#myspinner').append(`<i class="fas fa-spinner fa-spin fa-7x" style="margin-top:50px;left: calc( 50% - 50px);z-index: 1000;position: fixed;"></i>`)
                 showHideMessage(result.message, true);
                 $('body').fadeOut(4000, function(){

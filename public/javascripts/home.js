@@ -4,7 +4,7 @@ $(document).ready(function () {
   
   function getUsersList() {
     $.ajax({
-        url: "http://localhost:3000/users",
+        url: "http://localhost:3000/api/users",
         type: "GET",
         data: {},
         success: function (result) {
@@ -14,27 +14,6 @@ $(document).ready(function () {
   
             }
 
-        },
-        error: function (xhr) {
-            showHideMessage("Error: " + xhr.getMessage(), true);
-            console.error(xhr);
-        }
-    });
-  }
-  
-  function deleteUser(user_id) {
-    $.ajax({
-        url: `http://localhost:3000/users/deleteuser`,
-        type: "DELETE",
-        data: {user_id:`${user_id}`},
-        success: function (data) {
-            showHideMessage(data.message, true);
-            if (data.success) {
-                getUsersList();
-            } else {
-              showHideMessage(data.message, true);
-            }
-            console.log(data);
         },
         error: function (xhr) {
             showHideMessage("Error: " + xhr.getMessage(), true);
@@ -72,12 +51,12 @@ $(document).ready(function () {
   function logout(){
 
     $.ajax({
-        url: `http://localhost:3000/users/deletesession`,
-        type: "DELETE",
+        url: `http://localhost:3000/api/users/deletesession`,
+        type: "POST",
         data: {},
         success:function( result ){
             if(result.success){
-                $('#abovespinner').append(`<h3 class="alert alert-warning alert-dismissible fade show" "style="margin-top:50px;left: calc( 50% - 50px);z-index: 1000;position: fixed;">User has been Logged Out!</h3>`)
+                $('#abovespinner').append(`<h3 class="alert alert-warning alert-dismissible fade show" "style="margin-top:50px;left: calc( 50% - 50px);z-index: 1000;position: fixed;">Please wait.... Logging out</h3>`)
                 $('#myspinner').append(`<i class="fas fa-spinner fa-spin fa-7x" style="margin-top:50px;left: calc( 50% - 50px);z-index: 1000;position: fixed;"></i>`)
                 showHideMessage(result.message, true);
                 $('body').fadeOut(4000, function(){

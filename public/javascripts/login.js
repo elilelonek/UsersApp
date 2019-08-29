@@ -4,7 +4,7 @@ $(document).ready(function(){
 
 function CheckIfLogin(){
     $.ajax({
-        url:'http://localhost:3000/users',
+        url:'http://localhost:3000/api/users',
         type:"GET",
         data:{},
         success:function( result ){
@@ -44,7 +44,7 @@ function login(){
     }
     else{
     $.ajax({
-        url:'http://localhost:3000/users/login',
+        url:'http://localhost:3000/api/users/login',
         type:"POST",
         data:{"name": user, "password": password},
         success:function( result ){
@@ -90,7 +90,7 @@ function RegisterUser(){
     }
     else{
         $.ajax({
-            url:'http://localhost:3000/users/registeruser',
+            url:'http://localhost:3000/api/users/registeruser',
             type:"PUT",
             data:{"password": password, "name": user, "age": age, "phone": phone},
             success:function( result ){

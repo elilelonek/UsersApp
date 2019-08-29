@@ -20,15 +20,15 @@
 
 <body>
     <center>
-            <div id="abovespinner">
-                    <div id="myspinner">
-                
-                    </div>
-            </div>
+        <div id="abovespinner">
+                <div id="myspinner">
+            
+                </div>
+        </div>
     </center>
     <div class="container">
         <div class="row">
-            <h1>Administration Page</h1>
+            <h1>Home Page</h1>
             <br>
             <div class="col-md-12">
                 <div id="user_message"></div>
@@ -40,10 +40,9 @@
                         <thead>
                             <tr>
                                 <th>ID</th>
-                                <th>User Name</th>
+                                <th>Name</th>
                                 <th>Age</th>
                                 <th>Phone</th>
-                                <th>Delete</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -51,53 +50,11 @@
                         </tbody>
                     </table>
                 </div>
-                <h3>Admins</h3>
-                <div>
-                        <table id="admin_table" class="table table-dark">
-                        <thead>
-                                <tr>
-                                    <th>ID</th>
-                                    <th>User Name</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-    
-                            </tbody>
-                        </table>
-                </div>
-            </div>
-            <div class="col-md-6">
-                <h3>New User</h3>
-                <form>
-                    <div class="form-group">
-                        <label>User Name</label>
-                        <input type="text" id="name" placeholder="User Name" class="form-control">
-                    </div>
-                    <div class="form-group">
-                        <label>Password</label>
-                        <input type="password" id="password" placeholder="Password" class="form-control">
-                    </div>
-                    <div class="form-group">
-                        <label>Age</label>
-                        <input type="text" id="age" placeholder="Age" class="form-control">
-                    </div>
-                    <div class="form-group">
-                        <label>Phone</label>
-                        <input type="text" id="phone" placeholder="Phone" class="form-control">
-                    </div>
-
-                        <div class="custom-control custom-checkbox">
-                        <input type="checkbox" class="custom-control-input" id="admin" name="admin">
-                        <label class="custom-control-label" for="admin">Check for Admin Role</label>
-                        </div>
-                        <br>
-                        <br>
-                    <div class="btn btn-success" onclick="addUser();">Save</div> <div class="logout btn btn-success" onclick="logout();">Log Out</div>
-                </form>
+                <div class="btn btn-success" onclick="logout();">Sign out</div>
             </div>
         </div>
     </div>
-    <script src="../javascripts/adminhome.js"></script>
+    <script src="../javascripts/home.js"></script>
 </body>
 
 </html>

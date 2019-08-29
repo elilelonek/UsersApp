@@ -1,6 +1,7 @@
 var express = require('express');
 var router = express.Router();
-var httpresponse = require('../moduls/HttpResponse')
+// var httpresponse = require('../../../moduls/httpresponse')
+var httpresponse = require('../../moduls/httpresponse')
 
 count = 0;
 countforAuth = 0;
@@ -33,7 +34,7 @@ router.get('/', function (req, res) {
 
     if (username && CheckifAdmin) {
         
-        response.redirect = "http://localhost:3000/adminhome";
+        response.redirect = "http://localhost:3000/adminpage";
         response.success = true;
         response.data = users;
         response.AdminUsers = AdminUsers;
@@ -155,7 +156,7 @@ router.delete('/deleteadmin', function (req, res) {
 });
 
 // Remove User Session when press LogOut Button
-router.delete('/deletesession', function (req, res) {
+router.post('/deletesession', function (req, res) {
 
     var response = new httpresponse();
 
@@ -389,7 +390,7 @@ router.post('/login', function (req, res) {
         </div>`
 
         if(CheckifAdmin == true){
-            response.redirect = "http://localhost:3000/adminhome"
+            response.redirect = "http://localhost:3000/adminpage"
         }
         else{
             response.redirect = "http://localhost:3000/homepage"
