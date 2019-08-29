@@ -66,7 +66,7 @@ router.delete('/deleteuser', function (req, res) {
     var response = new httpresponse();
 
     var username = req.session.user_logged_in
-    CheckifAdmin = checkisAdmin(user_name);
+    CheckifAdmin = checkisAdmin(username);
 
     if (username && CheckifAdmin) {
 
