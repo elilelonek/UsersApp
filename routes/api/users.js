@@ -1,6 +1,5 @@
 var express = require('express');
 var router = express.Router();
-// var httpresponse = require('../../../moduls/httpresponse')
 var httpresponse = require('../../moduls/httpresponse')
 
 count = 0;
